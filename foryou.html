@@ -51,19 +51,48 @@
             z-index: 0;
         }
 
+        /* กล่องสไตล์มอนชิชิที่จะลอยขึ้นมา */
         .sparkle-bg {
             position: absolute;
             pointer-events: none;
-            animation: floatUp 5s linear infinite;
+            animation: floatUp 4s linear infinite;
             opacity: 0;
             z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         @keyframes floatUp {
-            0% { transform: translateY(110vh) scale(0.5) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.8; }
-            100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
+            0% { transform: translateY(110vh) scale(0.3) rotate(0deg); opacity: 0; }
+            15% { opacity: 0.9; }
+            85% { opacity: 0.9; }
+            100% { transform: translateY(-10vh) scale(1.4) rotate(360deg); opacity: 0; }
+        }
+
+        /* CSS สำหรับน้องมอนชิชิตัวเล็กที่จะลอยขึ้นมา */
+        .mini-monch {
+            width: 45px;
+            height: 45px;
+            position: relative;
+            transform: scale(0.8);
+        }
+        .mini-monch .m-hair {
+            width: 40px; height: 40px; background: var(--monch-brown); border-radius: 50%; position: absolute;
+        }
+        .mini-monch .m-face {
+            width: 28px; height: 26px; background: var(--monch-peach); border-radius: 45% 45% 50% 50%; position: absolute; top: 8px; left: 6px;
+        }
+        .mini-monch .m-eye-l, .mini-monch .m-eye-r {
+            width: 4px; height: 4px; background: #222; border-radius: 50%; position: absolute; top: 8px;
+        }
+        .mini-monch .m-eye-l { left: 6px; } .mini-monch .m-eye-r { right: 6px; }
+        .mini-monch .m-cheek-l, .mini-monch .m-cheek-r {
+            width: 7px; height: 5px; background: rgba(255, 77, 109, 0.7); border-radius: 50%; position: absolute; top: 13px;
+        }
+        .mini-monch .m-cheek-l { left: 2px; } .mini-monch .m-cheek-r { right: 2px; }
+        .mini-monch .m-pacifier {
+            width: 6px; height: 6px; background: var(--monch-yellow); border-radius: 50%; position: absolute; bottom: 3px; left: 11px; border: 1px solid #fff;
         }
 
         .monchhichi-avatar {
@@ -71,6 +100,12 @@
             height: 130px;
             position: relative;
             margin: 0 auto 15px auto;
+            cursor: pointer;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .monchhichi-avatar:hover {
+            transform: scale(1.08) rotate(5deg);
         }
 
         .monch-hair {
@@ -216,16 +251,15 @@
         .monch-bow::before { left: -10px; transform: rotate(-30deg); }
         .monch-bow::after { right: -10px; transform: rotate(30deg); }
 
-        /* การ์ดหลักขนาดใหญ่พิเศษ */
         .card-container {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.93);
+            backdrop-filter: blur(20px);
             border-radius: 35px;
-            padding: 40px 35px;
+            padding: 45px 35px;
             width: 95%;
             max-width: 580px;
-            min-height: 560px;
-            box-shadow: 0 20px 50px rgba(93, 64, 55, 0.15);
+            min-height: 580px;
+            box-shadow: 0 25px 60px rgba(93, 64, 55, 0.18);
             border: 6px solid var(--monch-cream);
             outline: 3px solid var(--monch-pink);
             display: flex;
@@ -257,7 +291,7 @@
             justify-content: center;
             flex-grow: 1;
             width: 100%;
-            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards;
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.15) forwards;
         }
 
         .screen-content.active {
@@ -265,21 +299,22 @@
         }
 
         @keyframes popIn {
-            0% { opacity: 0; transform: scale(0.85) translateY(20px); }
+            0% { opacity: 0; transform: scale(0.9) translateY(25px); }
             100% { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         h2 {
             color: var(--monch-brown);
-            font-size: 28px;
+            font-size: 30px;
             margin-bottom: 12px;
             font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
         p.desc {
             color: var(--monch-light-brown);
             font-size: 16px;
-            line-height: 1.5;
+            line-height: 1.6;
             margin-bottom: 25px;
         }
 
@@ -303,8 +338,8 @@
         }
 
         .q-step {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: #fff;
             border: 3px solid #ffe3e8;
@@ -312,24 +347,25 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 15px;
             color: var(--monch-light-brown);
             z-index: 2;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .q-step.active {
             background: var(--monch-deep-pink);
             border-color: var(--monch-pink);
             color: #fff;
-            transform: scale(1.15);
-            box-shadow: 0 4px 10px rgba(255, 77, 109, 0.3);
+            transform: scale(1.2);
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
         }
 
         .q-step.completed {
             background: var(--monch-peach);
             border-color: var(--monch-yellow);
             color: var(--monch-brown);
+            transform: scale(1.05);
         }
 
         .input-box {
@@ -343,66 +379,73 @@
             display: block;
             font-size: 16px;
             color: var(--monch-brown);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             font-weight: 500;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         .input-field {
             width: 100%;
-            padding: 14px 18px;
+            padding: 15px 20px;
             border: 3px solid #ffe5ec;
-            border-radius: 18px;
+            border-radius: 20px;
             font-family: 'Mitr', sans-serif;
-            font-size: 16px;
+            font-size: 17px;
             color: var(--monch-brown);
             outline: none;
             background: var(--monch-cream);
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             text-align: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         }
 
         .input-field:focus {
             border-color: var(--monch-pink);
-            box-shadow: 0 0 12px rgba(255, 179, 198, 0.4);
+            box-shadow: 0 0 15px rgba(255, 179, 198, 0.6);
             background: #fff;
+            transform: scale(1.01);
         }
 
         .error-message {
             color: var(--monch-red);
-            font-size: 14px;
-            margin-top: 8px;
+            font-size: 14.5px;
+            margin-top: 12px;
             display: none;
             align-items: center;
             justify-content: center;
-            gap: 5px;
+            gap: 8px;
+            line-height: 1.5;
+            background: #fff0f1;
+            padding: 12px 16px;
+            border-radius: 14px;
+            border: 1px solid #ffccd1;
             animation: shake 0.4s ease-in-out;
         }
 
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
         }
 
         .btn-wrapper {
             width: 100%;
             max-width: 400px;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
         .primary-btn {
             background: linear-gradient(135deg, var(--monch-deep-pink) 0%, #ff758f 100%);
             border: none;
             color: white;
-            padding: 14px 35px;
-            font-size: 18px;
+            padding: 16px 35px;
+            font-size: 19px;
             border-radius: 50px;
             cursor: pointer;
             font-family: 'Mitr', sans-serif;
             font-weight: 500;
-            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.4);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 25px rgba(255, 77, 109, 0.35);
+            transition: all 0.25s ease;
             width: 100%;
             display: flex;
             align-items: center;
@@ -412,70 +455,80 @@
 
         .primary-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(255, 77, 109, 0.6);
+            box-shadow: 0 12px 28px rgba(255, 77, 109, 0.5);
+            filter: brightness(1.05);
+        }
+        
+        .primary-btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(255, 77, 109, 0.4);
         }
 
-        /* เอฟเฟกต์กล่องของขวัญขยับดุ๊กดิ๊ก */
         .surprise-box {
-            width: 160px;
-            height: 160px;
+            width: 170px;
+            height: 170px;
             position: relative;
             cursor: pointer;
-            margin: 20px 0;
-            animation: wiggle 2.5s infinite ease-in-out;
+            margin: 25px 0;
+            animation: wiggle 2s infinite ease-in-out;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .surprise-box:hover {
+            animation-play-state: paused;
+            transform: scale(1.12);
         }
 
         @keyframes wiggle {
             0%, 100% { transform: rotate(0) scale(1); }
-            10% { transform: rotate(-8deg) scale(1.05); }
-            20% { transform: rotate(8deg) scale(1.05); }
-            30% { transform: rotate(-6deg) scale(1.05); }
-            40% { transform: rotate(6deg) scale(1.05); }
-            50% { transform: rotate(0) scale(1); }
+            8% { transform: rotate(-10deg) scale(1.08); }
+            16% { transform: rotate(10deg) scale(1.08); }
+            24% { transform: rotate(-8deg) scale(1.08); }
+            32% { transform: rotate(8deg) scale(1.08); }
+            40% { transform: rotate(0) scale(1); }
         }
 
         .gift-box-body {
             width: 100%;
             height: 100%;
             background: var(--monch-deep-pink);
-            border-radius: 20px;
+            border-radius: 22px;
             position: relative;
-            box-shadow: 0 10px 25px rgba(230, 57, 70, 0.3);
+            box-shadow: 0 12px 30px rgba(230, 57, 70, 0.35);
             border: 4px solid var(--monch-cream);
         }
 
         .gift-ribbon-v {
-            width: 30px;
+            width: 32px;
             height: 100%;
             background: var(--monch-yellow);
             position: absolute;
-            left: calc(50% - 15px);
+            left: calc(50% - 16px);
             top: 0;
             border-radius: 10px;
         }
 
         .gift-ribbon-h {
             width: 100%;
-            height: 30px;
+            height: 32px;
             background: var(--monch-yellow);
             position: absolute;
-            top: calc(50% - 15px);
+            top: calc(50% - 16px);
             left: 0;
             border-radius: 10px;
         }
 
         .gift-bow-l, .gift-bow-r {
-            width: 50px;
-            height: 50px;
-            border: 8px solid var(--monch-yellow);
+            width: 55px;
+            height: 55px;
+            border: 9px solid var(--monch-yellow);
             border-radius: 50% 50% 0 50%;
             position: absolute;
-            top: -30px;
+            top: -34px;
         }
-        .gift-bow-l { left: 32px; transform: rotate(-15deg); }
-        .gift-bow-r { right: 32px; transform: rotate(105deg); border-radius: 50% 50% 50% 0; }
+        .gift-bow-l { left: 34px; transform: rotate(-15deg); }
+        .gift-bow-r { right: 34px; transform: rotate(105deg); border-radius: 50% 50% 50% 0; }
 
-        /* สไตล์การ์ดข้อความแฮนด์เมด */
         .wish-slide {
             display: none;
             flex-direction: column;
@@ -483,7 +536,7 @@
             justify-content: center;
             width: 100%;
             height: 100%;
-            animation: pageFlip 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+            animation: pageFlip 0.65s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
         }
 
         .wish-slide.active {
@@ -491,39 +544,47 @@
         }
 
         @keyframes pageFlip {
-            0% { transform: rotateY(-30deg) scale(0.95); opacity: 0; }
-            100% { transform: rotateY(0) scale(1); opacity: 1; }
+            0% { transform: rotateY(-45deg) scale(0.9); opacity: 0; filter: blur(2px); }
+            100% { transform: rotateY(0) scale(1); opacity: 1; filter: blur(0); }
         }
 
         .wish-text {
-            font-size: 19px;
+            font-size: 20px;
             color: var(--monch-brown);
-            line-height: 1.9;
-            margin: 15px 0 25px 0;
-            background: rgba(255, 255, 255, 0.5);
-            padding: 25px;
-            border-radius: 20px;
-            border: 2px dashed var(--monch-pink);
+            line-height: 2.1;
+            margin: 20px 0 25px 0;
+            background: rgba(255, 255, 255, 0.75);
+            padding: 30px 25px;
+            border-radius: 24px;
+            border: 3px dashed var(--monch-pink);
             width: 100%;
+            box-shadow: 0 8px 20px rgba(255, 179, 198, 0.15);
+            word-break: break-word;
+        }
+        
+        .wish-text b {
+            color: var(--monch-deep-pink);
+            background: linear-gradient(transparent 60%, #ffe3e8 40%);
+            padding: 0 4px;
         }
 
         .card-dots {
             display: flex;
-            gap: 8px;
-            margin-top: 15px;
+            gap: 10px;
+            margin-top: 20px;
         }
 
         .c-dot {
-            width: 10px;
-            height: 10px;
+            width: 11px;
+            height: 11px;
             background-color: #ffe3e8;
             border-radius: 50%;
-            transition: all 0.3s;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .c-dot.active {
             background-color: var(--monch-deep-pink);
-            width: 24px;
+            width: 28px;
             border-radius: 10px;
         }
     </style>
@@ -666,6 +727,14 @@
         let currentWishSlide = 1;
         const totalWishSlides = 3;
 
+        function triggerErrorShake(elementId) {
+            const el = document.getElementById(elementId);
+            el.style.display = 'flex';
+            el.style.animation = 'none';
+            el.offsetHeight; 
+            el.style.animation = 'shake 0.4s ease-in-out';
+        }
+
         function handleAuthSubmit() {
             const birthdayVal = document.getElementById('birthday-input').value.trim();
             const nicknameVal = document.getElementById('nickname-input').value.trim().toLowerCase();
@@ -683,7 +752,7 @@
                     
                     authStep = 2;
                 } else {
-                    document.getElementById('error-1').style.display = 'flex';
+                    triggerErrorShake('error-1');
                 }
             } 
             else if (authStep === 2) {
@@ -698,7 +767,7 @@
                     
                     authStep = 3;
                 } else {
-                    document.getElementById('error-2').style.display = 'flex';
+                    triggerErrorShake('error-2');
                 }
             } 
             else if (authStep === 3) {
@@ -710,21 +779,23 @@
                     document.getElementById('auth-screen').classList.remove('active');
                     document.getElementById('surprise-screen').classList.add('active');
                 } else {
-                    document.getElementById('error-3').style.display = 'flex';
+                    triggerErrorShake('error-3');
                 }
             }
         }
 
         function explodeGift() {
-            for (let i = 0; i < 40; i++) {
-                setTimeout(createSparkle, i * 80);
+            // ตอนเปิดกล่องให้พุ่งรัว ๆ ทั้งหัวใจและมอนชิชิ
+            for (let i = 0; i < 50; i++) {
+                setTimeout(createSparkle, i * 60);
             }
 
             document.getElementById('surprise-screen').classList.remove('active');
             document.getElementById('slide-1').classList.add('active');
             document.getElementById('card-dots-container').style.display = 'flex';
             
-            setInterval(createSparkle, 350);
+            // ปล่อยให้ลอยเรื่อย ๆ เป็นพื้นหลัง
+            setInterval(createSparkle, 250);
         }
 
         function nextWishSlide() {
@@ -753,18 +824,37 @@
             const item = document.createElement('div');
             item.classList.add('sparkle-bg');
             
-            const sweetItems = ['❤️', '💖', '🧸', '🍌', '🍒', '✨', '💝', '🍼'];
-            item.innerText = sweetItems[Math.floor(Math.random() * sweetItems.length)];
+            // สุ่มว่าจะให้เป็น Emoji หรือเป็น ตัวมอนชิชิลอยขึ้นมา
+            const isMonch = Math.random() < 0.4; // โอกาส 40% เป็นมอนชิชิ
+            
+            if (isMonch) {
+                // สร้าง DOM น้องมอนชิชิตัวจิ๋ว
+                item.innerHTML = `
+                    <div class="mini-monch">
+                        <div class="m-hair"></div>
+                        <div class="m-face">
+                            <div class="m-eye-l"></div>
+                            <div class="m-eye-r"></div>
+                            <div class="m-cheek-l"></div>
+                            <div class="m-cheek-r"></div>
+                        </div>
+                        <div class="m-pacifier"></div>
+                    </div>
+                `;
+            } else {
+                const sweetItems = ['❤️', '💖', '🧸', '✨', '💝', '🌻', '🌸', '🎈', '🎂'];
+                item.innerText = sweetItems[Math.floor(Math.random() * sweetItems.length)];
+                item.style.fontSize = Math.random() * 24 + 18 + 'px';
+            }
             
             item.style.left = Math.random() * 100 + 'vw';
-            item.style.animationDuration = Math.random() * 2 + 3 + 's';
-            item.style.fontSize = Math.random() * 20 + 15 + 'px';
+            item.style.animationDuration = Math.random() * 2 + 2.5 + 's';
             
             document.body.appendChild(item);
             
             setTimeout(() => {
                 item.remove();
-            }, 5000);
+            }, 4000);
         }
     </script>
 </body>
