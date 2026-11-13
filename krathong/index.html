@@ -2,7 +2,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mali:wght@500;700&family=Prompt:wght@400;500;600&display=swap">
 <style>
-/* Layout: night-pond storefront. Moon header + wavy water, 3-step flow (กระทง → จ่าย → ลอย), one column on phone, 2-3 col card grids on wide screens. */
+/* Layout: night-pond storefront. Moon header + wavy water, 3-step flow (กระทง → จ่าย → ลอย), final step is a live night-river scene where krathong drift away. */
 :root{
   --bg:#EAF1FF; --surface:#FFFFFF; --ink:#22275A; --muted:#5C6396; --line:#D3DCF5;
   --sun:#FFB62E; --sun-ink:#4A3000; --pink:#FF6FA3; --teal:#14907F; --water:#BFE3FF; --moon:#FFE9A8;
@@ -23,7 +23,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 :focus-visible{outline:3px solid var(--pink);outline-offset:2px}
 
 /* header */
-header{padding-top:20px;display:flex;align-items:center;gap:14px}
+header{padding-top:20px;padding-right:92px;display:flex;align-items:center;gap:14px}
 .moon{flex:none;width:64px;height:64px;border-radius:50%;background:var(--moon);box-shadow:0 0 0 8px color-mix(in srgb,var(--moon) 35%,transparent);position:relative}
 .moon::before,.moon::after{content:"";position:absolute;border-radius:50%;background:color-mix(in srgb,#E9C46A 60%,transparent)}
 .moon::before{width:12px;height:12px;left:14px;top:34px}.moon::after{width:8px;height:8px;left:38px;top:16px}
@@ -33,6 +33,15 @@ header p{margin:2px 0 0;color:var(--muted);font-size:14px}
 .waves path{fill:var(--water)}
 @media (prefers-reduced-motion:no-preference){.waves{animation:sway 5s ease-in-out infinite alternate}}
 @keyframes sway{to{transform:translateX(-18px)}}
+
+/* music toggle */
+.music{position:fixed;z-index:20;top:calc(env(safe-area-inset-top,0px) + 10px);right:max(12px,env(safe-area-inset-right,0px));
+  border:2px solid var(--ink);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 14px;font-size:14px;font-weight:500;display:flex;align-items:center;gap:6px}
+.music .note{display:inline-block;font-size:17px;line-height:1}
+.music[aria-pressed="true"] .note{animation:tick 1.2s ease-in-out infinite}
+.music[aria-pressed="false"]{opacity:.8}
+@keyframes tick{50%{transform:translateY(-3px) rotate(-10deg)}}
+@media (prefers-reduced-motion:reduce){.music[aria-pressed="true"] .note{animation:none}}
 
 /* stepper */
 .steps{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;gap:8px;padding:10px 0;margin:0;list-style:none}
@@ -48,12 +57,12 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .lead p{margin:4px 0 0;color:var(--muted)}
 
 /* product grid */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
 .card{background:var(--surface);border:2px solid var(--line);border-radius:22px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
 .card.has{border-color:var(--pink)}
 .card .art{background:var(--water);border-radius:16px;display:grid;place-items:center;padding:8px 0 0;overflow:hidden}
-.card .art svg{width:150px;max-width:100%;height:auto}
-.card h3{font-size:19px}
+.card .art svg{width:140px;max-width:100%;height:auto}
+.card h3{font-size:18px}
 .card .tag{align-self:flex-start;font-size:12px;font-weight:500;background:color-mix(in srgb,var(--teal) 18%,transparent);color:var(--teal);border-radius:999px;padding:1px 10px}
 .card p{margin:0;color:var(--muted);font-size:14px}
 .row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:4px}
@@ -62,6 +71,10 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .qty button{width:38px;height:38px;border-radius:50%;border:2px solid var(--ink);background:transparent;font-size:20px;line-height:1;font-weight:600}
 .qty button.add{background:var(--sun);border-color:var(--sun);color:var(--sun-ink)}
 .qty b{min-width:24px;text-align:center;font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 16px;font-size:15px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+#cats{margin:0 0 14px}
 
 /* bottom bar */
 .bar{position:sticky;bottom:0;margin-top:18px;padding:12px 0 max(12px,env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,var(--bg) 18%)}
@@ -95,32 +108,58 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .dots{display:flex;gap:4px;align-items:center;font-size:12.5px;color:var(--muted)}
 .dots i{width:9px;height:9px;border-radius:50%;background:var(--line);display:inline-block}
 .dots i.f{background:var(--pink)}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 16px;font-size:15px}
-.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .field{display:grid;gap:6px;margin-top:14px}
 .field label{font-weight:500}
 .field input{font:inherit;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:10px 14px;width:100%}
 .field small{color:var(--muted)}
 
-/* done */
-.ticket{background:var(--surface);border:2px dashed var(--ink);border-radius:26px;padding:20px;text-align:center;max-width:460px;margin:12px auto 0}
-.pond{background:var(--water);border-radius:18px;margin:12px 0;overflow:hidden;padding-top:6px}
-.pond .boat{display:block;width:140px;margin:0 auto}
-@media (prefers-reduced-motion:no-preference){.pond .boat{animation:bob 2.6s ease-in-out infinite}}
-@keyframes bob{50%{transform:translateY(-6px) rotate(2deg)}}
+/* ===== final scene: night river ===== */
+.scene{position:relative;width:100%;max-width:520px;margin:12px auto 0;aspect-ratio:4/5;border-radius:26px;overflow:hidden;background:#0d1240;isolation:isolate;box-shadow:0 10px 30px rgba(10,14,60,.35)}
+.scene svg.bg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.star{fill:#fff;animation:twinkle 3s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.25}50%{opacity:1}}
+.shim{transform-box:fill-box;transform-origin:center;animation:shim 3.4s ease-in-out infinite alternate}
+@keyframes shim{to{transform:scaleX(.7);opacity:.35}}
+.kt{position:absolute;width:24%;transform:translate(-50%,-50%) scale(var(--s,1));
+  transition:left var(--t,9s) cubic-bezier(.22,.6,.3,1) var(--dl,0s),top var(--t,9s) cubic-bezier(.22,.6,.3,1) var(--dl,0s),transform var(--t,9s) cubic-bezier(.22,.6,.3,1) var(--dl,0s);pointer-events:none}
+.kt .in{position:relative;animation:bob 2.8s ease-in-out infinite;animation-delay:var(--d,0s)}
+.kt svg{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 6px rgba(0,0,0,.35))}
+.kt .glow{position:absolute;left:50%;top:2%;width:110%;aspect-ratio:1;transform:translate(-50%,-30%);border-radius:50%;
+  background:radial-gradient(circle,rgba(255,200,90,.75),rgba(255,160,60,.25) 45%,transparent 68%);animation:flick 1.6s ease-in-out infinite;animation-delay:var(--d,0s);z-index:-1}
+.kt .rip{position:absolute;left:50%;bottom:-6%;width:130%;height:26%;transform:translateX(-50%);border:2px solid rgba(255,255,255,.35);border-radius:50%;animation:rip 2.8s ease-out infinite;animation-delay:var(--d,0s);z-index:-1}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-4%) rotate(2deg)}}
+@keyframes flick{0%,100%{opacity:.85;transform:translate(-50%,-30%) scale(1)}50%{opacity:1;transform:translate(-50%,-30%) scale(1.12)}}
+@keyframes rip{0%{opacity:.7;transform:translateX(-50%) scale(.7)}100%{opacity:0;transform:translateX(-50%) scale(1.35)}}
+.lan{position:absolute;bottom:-12%;width:4.2%;aspect-ratio:3/4;border-radius:38% 38% 22% 22%;background:radial-gradient(circle at 50% 70%,#fff3b0,#ffa63d 60%,#e8590c);
+  box-shadow:0 0 18px 6px rgba(255,170,60,.55);opacity:0;animation:rise var(--rt,24s) linear infinite;animation-delay:var(--rd,0s);z-index:1}
+@keyframes rise{0%{transform:translate(0,0);opacity:0}8%{opacity:.95}85%{opacity:.8}100%{transform:translate(var(--sx,20px),-640%);opacity:0}}
+.say{position:absolute;left:6%;right:6%;text-align:center;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.6);z-index:3;pointer-events:none;transition:opacity 1.2s}
+.say.top{top:5%;font-family:var(--display);font-size:clamp(16px,3.6vw,21px);font-weight:700}
+.say.hint{top:5%;font-size:15px}
+.say.hide{opacity:0}
+.say.wish{top:14%;font-family:var(--display);font-size:clamp(17px,4vw,24px);font-weight:700;color:#FFE9A8;opacity:0}
+.say.wish.show{opacity:1}
+.cta{position:absolute;left:0;right:0;bottom:5%;display:grid;justify-items:center;z-index:4;transition:opacity .6s}
+.cta.hide{opacity:0;pointer-events:none}
+.cta .btn{box-shadow:0 6px 18px rgba(0,0,0,.35)}
+@media (prefers-reduced-motion:reduce){.kt .in,.kt .glow,.kt .rip,.lan,.star,.shim{animation:none}.lan{opacity:.7;bottom:30%}}
+
+.ticket{background:var(--surface);border:2px dashed var(--ink);border-radius:26px;padding:20px;text-align:center;max-width:520px;margin:16px auto 0;animation:fadein .9s both}
+@keyframes fadein{from{opacity:0;transform:translateY(10px)}}
 .ticket dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;text-align:left;margin:10px 0}
 .ticket dt{color:var(--muted)}.ticket dd{margin:0;font-weight:500;min-width:0;overflow-wrap:anywhere}
 .code{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:.08em}
 footer{margin-top:26px;color:var(--muted);font-size:12.5px;text-align:center}
 </style>
 
+<button class="music" id="music" aria-pressed="true" aria-label="เปิดหรือปิดเพลง"><span class="note" aria-hidden="true">♪</span><span id="musicTxt">เพลง เปิด</span></button>
+
 <div class="wrap">
   <header>
     <div class="moon" aria-hidden="true"></div>
     <div>
       <h1>กระทงลอยลอย</h1>
-      <p>เลือกกระทง จ่ายด้วย QR แล้วเลือกที่ลอย ไปลอยทุกข์กัน</p>
+      <p>เลือกกระทง จ่ายด้วย QR แล้วลอยกันบนแม่น้ำจริงๆ</p>
     </div>
   </header>
   <svg class="waves" viewBox="0 0 600 36" preserveAspectRatio="none" aria-hidden="true"><path d="M-20 18 Q 25 0 70 18 T 160 18 T 250 18 T 340 18 T 430 18 T 520 18 T 610 18 V36 H-20Z"/></svg>
@@ -131,7 +170,8 @@ footer{margin-top:26px;color:var(--muted);font-size:12.5px;text-align:center}
 
   <!-- STEP 1 -->
   <section id="s0">
-    <div class="lead"><h2>วันนี้อยากลอยอะไรดี</h2><p>ทุกใบมีหน้าตา ทุกใบมีความหมาย (บางใบก็แค่น่ารัก)</p></div>
+    <div class="lead"><h2>วันนี้อยากลอยอะไรดี</h2><p>14 แบบ ทุกใบมีหน้าตา ทุกใบมีความหมาย (บางใบก็แค่น่ารัก)</p></div>
+    <div class="chips" id="cats" role="group" aria-label="หมวดกระทง"></div>
     <div class="grid" id="grid"></div>
     <div class="bar"><div class="in">
       <div class="sum"><small id="cnt">ยังไม่ได้เลือกกระทง</small><strong id="tot">฿0</strong></div>
@@ -164,20 +204,48 @@ footer{margin-top:26px;color:var(--muted);font-size:12.5px;text-align:center}
       <div class="field">
         <label for="wish">คำอธิษฐาน</label>
         <input id="wish" maxlength="60" placeholder="เช่น ขอให้โปรเจกต์ไม่แก้ซ้ำอีก">
-        <small>ไม่เกิน 60 ตัวอักษร จะพิมพ์ติดไปกับกระทงทุกใบ</small>
+        <small>ไม่เกิน 60 ตัวอักษร กระทงจะพาไปลอยในฉากสุดท้าย</small>
       </div>
     </div>
     <div class="bar"><div class="in">
       <div class="sum"><small id="pickInfo">ยังไม่ได้เลือกที่ลอย</small><strong id="pickName">&nbsp;</strong></div>
-      <button class="btn pink" id="confirm" disabled>ยืนยันการลอย</button>
+      <button class="btn pink" id="confirm" disabled>ไปที่ท่าน้ำ</button>
     </div></div>
   </section>
 
-  <!-- DONE -->
+  <!-- DONE: night river -->
   <section id="s3" hidden>
-    <div class="ticket">
+    <div class="scene" id="scene">
+      <svg class="bg" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a0e33"/><stop offset=".65" stop-color="#2b2f7a"/><stop offset="1" stop-color="#8a5a9f"/></linearGradient>
+          <linearGradient id="wat" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#27317f"/><stop offset=".5" stop-color="#141b5a"/><stop offset="1" stop-color="#090d33"/></linearGradient>
+          <radialGradient id="mg"><stop offset="0" stop-color="#FFE9A8" stop-opacity=".55"/><stop offset="1" stop-color="#FFE9A8" stop-opacity="0"/></radialGradient>
+        </defs>
+        <rect width="400" height="200" fill="url(#sky)"/>
+        <g id="stars"></g>
+        <g id="moonG"></g>
+        <g id="shore" fill="#090d33"></g>
+        <rect y="200" width="400" height="300" fill="url(#wat)"/>
+        <g id="refl" stroke="#FFE9A8" stroke-linecap="round" stroke-width="3" fill="none"></g>
+        <g stroke="#fff" stroke-opacity=".1" stroke-width="1.5" fill="none" stroke-linecap="round">
+          <path d="M20 250 q10 -5 20 0 t20 0"/><path d="M300 290 q10 -5 20 0 t20 0"/><path d="M120 330 q10 -5 20 0 t20 0"/><path d="M250 380 q10 -5 20 0 t20 0"/><path d="M40 430 q10 -5 20 0 t20 0"/><path d="M330 450 q10 -5 20 0 t20 0"/>
+        </g>
+        <g id="water-extra"></g>
+      </svg>
+      <div class="lan" style="left:12%;--rt:26s;--rd:0s;--sx:30px"></div>
+      <div class="lan" style="left:28%;--rt:30s;--rd:6s;--sx:-20px"></div>
+      <div class="lan" style="left:46%;--rt:24s;--rd:12s;--sx:25px"></div>
+      <div class="lan" style="left:64%;--rt:32s;--rd:3s;--sx:-35px"></div>
+      <div class="lan" style="left:80%;--rt:28s;--rd:9s;--sx:20px"></div>
+      <div class="lan" style="left:90%;--rt:34s;--rd:16s;--sx:-18px"></div>
+      <div id="kts"></div>
+      <div class="say top" id="sayTop"></div>
+      <div class="say wish" id="sayWish"></div>
+      <div class="cta" id="cta"><button class="btn pink" id="release">ปล่อยกระทงลอยเลย</button></div>
+    </div>
+    <div class="ticket" id="ticket" hidden>
       <h2>กระทงออกเดินทางแล้ว</h2>
-      <div class="pond" id="pond"></div>
       <div class="code" id="code"></div>
       <dl id="detail"></dl>
       <p style="margin:0;color:var(--muted);font-size:14px">โชว์รหัสนี้ที่จุดลอยได้เลย</p>
@@ -192,8 +260,12 @@ footer{margin-top:26px;color:var(--muted);font-size:12.5px;text-align:center}
 (function(){
   var baht=function(n){return '฿'+n.toLocaleString('th-TH')};
   var $=function(id){return document.getElementById(id)};
+  var reduced=false;try{reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
 
   /* ---------- กระทง: วาดด้วย SVG ---------- */
+  var EYES='<circle cx="45" cy="78" r="3.2" fill="#2b2250"/><circle cx="75" cy="78" r="3.2" fill="#2b2250"/>';
+  var CHEEK='<ellipse cx="37" cy="85" rx="5" ry="3" fill="#FF8FB8" opacity=".75"/><ellipse cx="83" cy="85" rx="5" ry="3" fill="#FF8FB8" opacity=".75"/>';
+  var SMILE='<path d="M52 85 Q60 92 68 85" fill="none" stroke="#2b2250" stroke-width="2.2" stroke-linecap="round"/>';
   function kr(o){
     var petals='';
     for(var a=-70;a<=70;a+=28){petals+='<ellipse cx="60" cy="40" rx="9" ry="24" transform="rotate('+a+' 60 66)" fill="'+o.petal+'" stroke="'+o.edge+'" stroke-width="1.5"/>';}
@@ -202,29 +274,58 @@ footer{margin-top:26px;color:var(--muted);font-size:12.5px;text-align:center}
       '<rect x="56" y="22" width="8" height="30" rx="3" fill="#fff8e6" stroke="'+o.edge+'" stroke-width="1.5"/>'+
       '<path d="M60 8 Q69 18 60 24 Q51 18 60 8Z" fill="#FFB62E" stroke="#E8590C" stroke-width="1.5"/>'+
       '<path d="M8 66 Q60 112 112 66 L104 58 H16Z" fill="'+o.base+'" stroke="'+o.edge+'" stroke-width="2" stroke-linejoin="round"/>'+
-      '<circle cx="45" cy="78" r="3.2" fill="#2b2250"/><circle cx="75" cy="78" r="3.2" fill="#2b2250"/>'+
-      '<ellipse cx="37" cy="85" rx="5" ry="3" fill="#FF8FB8" opacity=".75"/><ellipse cx="83" cy="85" rx="5" ry="3" fill="#FF8FB8" opacity=".75"/>'+
-      (o.mouth||'<path d="M52 85 Q60 92 68 85" fill="none" stroke="#2b2250" stroke-width="2.2" stroke-linecap="round"/>')+
+      (o.eyes===false?'':EYES)+(o.cheek===false?'':CHEEK)+
+      (o.mouth===undefined?SMILE:o.mouth)+
       (o.extra||'')+'</svg>';
   }
+  function sunPetals(){var s='';for(var k=0;k<12;k++)s+='<ellipse cx="60" cy="18" rx="6" ry="13" transform="rotate('+(k*30)+' 60 44)" fill="#FFC21A" stroke="#B37A00" stroke-width="1.2"/>';return s+'<circle cx="60" cy="44" r="14" fill="#7A4A1F" stroke="#4A2A0C" stroke-width="1.5"/>'}
   var items=[
-    {id:'leaf',name:'กระทงใบตองยิ้มแย้ม',tag:'ใบตองและดอกไม้จริง',desc:'แบบคลาสสิก ใจดี ไม่เรื่องมาก',price:60,
+    {id:'leaf',cat:'c',name:'กระทงใบตองยิ้มแย้ม',tag:'ใบตองและดอกไม้จริง',desc:'แบบคลาสสิก ใจดี ไม่เรื่องมาก',price:60,
       art:kr({base:'#7BC96F',edge:'#2F6B3A',petal:'#FF8FB8'})},
-    {id:'bread',name:'กระทงขนมปังปิ้งปิ๊ง',tag:'ปลากินได้',desc:'ลอยเสร็จ ปลามาช่วยเก็บ จบในเล่มเดียว',price:45,
+    {id:'bread',cat:'c',name:'กระทงขนมปังปิ้งปิ๊ง',tag:'ปลากินได้',desc:'ลอยเสร็จ ปลามาช่วยเก็บ จบในเล่มเดียว',price:45,
       art:kr({base:'#E9B872',edge:'#8A5A1F',petal:'#FFF3D6',extra:'<path d="M30 70 Q40 74 50 70 M70 70 Q80 74 90 70" stroke="#B9812F" stroke-width="2" fill="none" stroke-linecap="round" opacity=".6"/>'})},
-    {id:'cat',name:'กระทงแมวส้มหิวข้าว',tag:'ขายดี',desc:'หูตั้ง ตาแป๋ว ขออะไรก็ได้ ขอแค่ปลาทู',price:89,
+    {id:'lotus',cat:'c',name:'กระทงบัวบานสวยปัง',tag:'ถ่ายรูปขึ้น',desc:'กลีบเยอะ สีชมพู ถ่ายขึ้นกล้องแน่นอน',price:99,
+      art:kr({base:'#FFB3D1',edge:'#B03A6C',petal:'#FF6FA3',back:'<ellipse cx="60" cy="40" rx="30" ry="26" fill="#FFD0E3" stroke="#B03A6C" stroke-width="1.5"/>'})},
+    {id:'sun',cat:'c',name:'กระทงทานตะวันยิ้มแฉ่ง',tag:'สดใสทั้งแม่น้ำ',desc:'ลอยไปทางไหน แม่น้ำก็สว่างขึ้นทางนั้น',price:85,
+      art:kr({base:'#8FD16B',edge:'#2F7A2A',petal:'#FFE066',back:sunPetals()})},
+    {id:'cat',cat:'a',name:'กระทงแมวส้มหิวข้าว',tag:'ขายดี',desc:'หูตั้ง ตาแป๋ว ขออะไรก็ได้ ขอแค่ปลาทู',price:89,
       art:kr({base:'#FFA94D',edge:'#9A4B0C',petal:'#FFE2B8',back:'<path d="M14 62 L20 36 L38 56Z M106 62 L100 36 L82 56Z" fill="#FFA94D" stroke="#9A4B0C" stroke-width="2" stroke-linejoin="round"/>',
         mouth:'<path d="M54 84 Q57 90 60 85 Q63 90 66 84" fill="none" stroke="#2b2250" stroke-width="2.2" stroke-linecap="round"/>',
         extra:'<path d="M26 80 H10 M26 86 L12 91 M94 80 H110 M94 86 L108 91" stroke="#2b2250" stroke-width="1.6" stroke-linecap="round"/>'})},
-    {id:'duck',name:'กระทงเป็ดน้อยแหวกว่าย',tag:'เด็กๆ ชอบ',desc:'ไม่ต้องสอนว่ายน้ำ เกิดมาเพื่อลอยอยู่แล้ว',price:79,
-      art:kr({base:'#FFD84D',edge:'#9A7400',petal:'#FFF5BF',extra:'<ellipse cx="60" cy="90" rx="9" ry="5" fill="#FF8A3D" stroke="#B54A00" stroke-width="1.5"/>',
-        mouth:''})},
-    {id:'lotus',name:'กระทงบัวบานสวยปัง',tag:'ถ่ายรูปขึ้น',desc:'กลีบเยอะ สีชมพู ถ่ายขึ้นกล้องแน่นอน',price:99,
-      art:kr({base:'#FFB3D1',edge:'#B03A6C',petal:'#FF6FA3',back:'<ellipse cx="60" cy="40" rx="30" ry="26" fill="#FFD0E3" stroke="#B03A6C" stroke-width="1.5"/>'})},
-    {id:'ex',name:'กระทงลอยแฟนเก่า',tag:'ลอยไกลๆ นะ',desc:'ใส่ความหลังลงไป แล้วปล่อยให้น้ำพาไป',price:69,
+    {id:'duck',cat:'a',name:'กระทงเป็ดน้อยแหวกว่าย',tag:'เด็กๆ ชอบ',desc:'ไม่ต้องสอนว่ายน้ำ เกิดมาเพื่อลอยอยู่แล้ว',price:79,
+      art:kr({base:'#FFD84D',edge:'#9A7400',petal:'#FFF5BF',mouth:'',extra:'<ellipse cx="60" cy="90" rx="9" ry="5" fill="#FF8A3D" stroke="#B54A00" stroke-width="1.5"/>'})},
+    {id:'bear',cat:'a',name:'กระทงหมีน้อยขี้เซา',tag:'กอดแน่นๆ',desc:'ตื่นมาก็ลอยเลย ยังไม่ทันล้างหน้า',price:95,
+      art:kr({base:'#C98F5B',edge:'#6B3F1D',petal:'#FFE3C2',mouth:'',
+        back:'<circle cx="22" cy="58" r="12" fill="#C98F5B" stroke="#6B3F1D" stroke-width="2"/><circle cx="22" cy="58" r="6" fill="#F3CFA8"/><circle cx="98" cy="58" r="12" fill="#C98F5B" stroke="#6B3F1D" stroke-width="2"/><circle cx="98" cy="58" r="6" fill="#F3CFA8"/>',
+        extra:'<ellipse cx="60" cy="89" rx="11" ry="8" fill="#F3CFA8"/><ellipse cx="60" cy="85" rx="3.8" ry="2.8" fill="#2b2250"/><path d="M60 88 V91 M55 92 Q60 95 65 92" stroke="#2b2250" stroke-width="1.8" fill="none" stroke-linecap="round"/>'})},
+    {id:'frog',cat:'a',name:'กระทงกบเขียวกระโดด',tag:'ก็บๆ',desc:'ลอยไปได้ไกล เพราะกระโดดเก่งอยู่แล้ว',price:75,
+      art:kr({base:'#8BD36B',edge:'#2F7A2A',petal:'#D6F5B8',eyes:false,cheek:false,
+        mouth:'<path d="M40 82 Q60 98 80 82" fill="none" stroke="#2b2250" stroke-width="2.4" stroke-linecap="round"/>',
+        extra:'<circle cx="38" cy="58" r="11" fill="#8BD36B" stroke="#2F7A2A" stroke-width="2"/><circle cx="38" cy="56" r="6.5" fill="#fff"/><circle cx="38" cy="57" r="3.2" fill="#2b2250"/><circle cx="82" cy="58" r="11" fill="#8BD36B" stroke="#2F7A2A" stroke-width="2"/><circle cx="82" cy="56" r="6.5" fill="#fff"/><circle cx="82" cy="57" r="3.2" fill="#2b2250"/><circle cx="34" cy="90" r="2" fill="#FF8FB8"/><circle cx="86" cy="90" r="2" fill="#FF8FB8"/>'})},
+    {id:'ele',cat:'a',name:'กระทงช้างน้อยหูกาง',tag:'ช้างไทยไม่ทิ้งกัน',desc:'หูใหญ่ ฟังคำอธิษฐานได้ครบทุกคำ',price:109,
+      art:kr({base:'#A9B8D6',edge:'#4A5A86',petal:'#E3EAFB',mouth:'',
+        back:'<circle cx="14" cy="70" r="17" fill="#C4D0EA" stroke="#4A5A86" stroke-width="2"/><circle cx="106" cy="70" r="17" fill="#C4D0EA" stroke="#4A5A86" stroke-width="2"/>',
+        extra:'<path d="M54 82 Q56 104 66 100 Q70 96 66 94 Q64 92 66 82Z" fill="#A9B8D6" stroke="#4A5A86" stroke-width="1.8" stroke-linejoin="round"/>'})},
+    {id:'fish',cat:'a',name:'กระทงปลาทองปุ๋งปิ๋ง',tag:'ปลาในน้ำอยู่แล้ว',desc:'ลอยแล้วเหมือนปลากลับบ้าน',price:69,
+      art:kr({base:'#FF9A4D',edge:'#B34A00',petal:'#FFD9B0',mouth:'<circle cx="60" cy="89" r="3.2" fill="none" stroke="#2b2250" stroke-width="2"/>',
+        back:'<path d="M2 66 L-0 50 L18 60Z M118 66 L120 50 L102 60Z" fill="#FF9A4D" stroke="#B34A00" stroke-width="1.8" stroke-linejoin="round"/>',
+        extra:'<path d="M26 66 q6 6 12 0 M44 70 q6 6 12 0 M64 70 q6 6 12 0 M82 66 q6 6 12 0" stroke="#B34A00" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".55"/>'})},
+    {id:'ex',cat:'f',name:'กระทงลอยแฟนเก่า',tag:'ลอยไกลๆ นะ',desc:'ใส่ความหลังลงไป แล้วปล่อยให้น้ำพาไป',price:69,
       art:kr({base:'#B9A6FF',edge:'#4B3A9A',petal:'#E4DCFF',mouth:'<path d="M52 90 Q60 83 68 90" fill="none" stroke="#2b2250" stroke-width="2.2" stroke-linecap="round"/>',
-        extra:'<path d="M82 92 q3 6 0 8 q-3 -2 0 -8Z" fill="#6BB6FF"/>'})}
+        extra:'<path d="M82 92 q3 6 0 8 q-3 -2 0 -8Z" fill="#6BB6FF"/>'})},
+    {id:'boba',cat:'f',name:'กระทงชานมไข่มุก',tag:'หวานน้อย ลอยเยอะ',desc:'มีไข่มุกด้วย ปลาจะงงว่านี่คืออะไร',price:89,
+      art:kr({base:'#E8CFA8',edge:'#8A5A3A',petal:'#FFF0D9',
+        back:'<rect x="74" y="0" width="7" height="48" rx="3" fill="#FF6FA3" stroke="#B03A6C" stroke-width="1.5" transform="rotate(14 77 24)"/>',
+        extra:'<circle cx="48" cy="98" r="4" fill="#4A2C1A"/><circle cx="60" cy="102" r="4" fill="#4A2C1A"/><circle cx="72" cy="98" r="4" fill="#4A2C1A"/><circle cx="60" cy="94" r="4" fill="#4A2C1A"/>'})},
+    {id:'ghost',cat:'f',name:'กระทงผีน้อยบู๊',tag:'ไม่หลอน แค่น่ารัก',desc:'ปกติหลอนคน วันนี้ขอไปหลอนปลาแทน',price:79,
+      art:kr({base:'#F6F6FF',edge:'#6A6AA8',petal:'#E4E4FF',mouth:'<ellipse cx="60" cy="90" rx="4" ry="5" fill="#2b2250"/>',
+        extra:'<text x="92" y="30" font-size="13" font-weight="700" fill="#E4E4FF" stroke="#6A6AA8" stroke-width=".6" style="font-family:Mali,Prompt,sans-serif">บู๊</text>'})},
+    {id:'work',cat:'f',name:'กระทงลอยงานค้าง',tag:'เดดไลน์ไปไกลๆ',desc:'ขอให้งานที่ค้างลอยตามน้ำไป ไม่ต้องกลับมา',price:99,
+      art:kr({base:'#FFD0D0',edge:'#B03A3A',petal:'#FFF',mouth:'<path d="M48 90 Q53 85 58 90 T68 90" fill="none" stroke="#2b2250" stroke-width="2.2" stroke-linecap="round"/>',
+        back:'<g transform="rotate(-14 30 40)"><rect x="16" y="18" width="30" height="38" rx="3" fill="#fff" stroke="#B03A3A" stroke-width="1.5"/><path d="M21 27 H41 M21 34 H41 M21 41 H35" stroke="#B03A3A" stroke-width="1.5" opacity=".6"/></g><g transform="rotate(13 92 38)"><rect x="76" y="14" width="30" height="38" rx="3" fill="#fff" stroke="#B03A3A" stroke-width="1.5"/><path d="M81 23 H101 M81 30 H101 M81 37 H95" stroke="#B03A3A" stroke-width="1.5" opacity=".6"/></g>',
+        extra:'<path d="M90 70 q4 7 0 10 q-4 -3 0 -10Z" fill="#6BB6FF"/>'})}
   ];
+  var cats=[{k:'all',t:'ทั้งหมด'},{k:'c',t:'คลาสสิก'},{k:'a',t:'สัตว์น่ารัก'},{k:'f',t:'ขำๆ'}];
   var places=[
     {id:'lotus-pond',name:'สระบัวแสนสุข',desc:'น้ำนิ่ง ลอยง่าย เหมาะมือใหม่และคนใจเย็น',crowd:1,love:3,tag:'เงียบสงบ'},
     {id:'canal',name:'ท่าน้ำริมคลองสายชิล',desc:'นั่งริมน้ำ ลมเย็น มีม้านั่งให้คิดเรื่องชีวิต',crowd:2,love:4,tag:'บรรยากาศดี'},
@@ -235,18 +336,71 @@ footer{margin-top:26px;color:var(--muted);font-size:12.5px;text-align:center}
   ];
   var slots=['17:30 ตะวันตกดิน','19:00 จันทร์ขึ้น','20:30 เงียบๆ สบายๆ'];
 
-  var cart={},step=0,place=null,slot=0,order=null;
-  /* ใส่ URL เว็บแอป Apps Script (ลงท้าย /exec) ตรงนี้ */
+  var cart={},step=0,place=null,slot=0,catSel='all',scene=null,released=false,timers=[];
+
+  /* ใส่ URL ปลายทางรับออเดอร์ (เช่น /api/order บน Vercel) ตรงนี้ ถ้าเว้นว่างจะไม่ส่งไปที่ไหน */
   var WEBHOOK_URL='/api/order';
   function sendOrder(o){
     if(!WEBHOOK_URL)return;
     try{fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(o)}).catch(function(){});}catch(e){}
   }
 
+  /* ---------- เพลงกล่องดนตรี (แต่งเอง สังเคราะห์เสียงในเบราว์เซอร์) ---------- */
+  var AC=null,master=null,musicOn=true,mTimer=null,mStep=0,mNext=0;
+  var SC=[523.25,587.33,659.25,783.99,880,1046.5,1174.7,1318.5];
+  var MEL=[2,-1,4,-1,3,-1,1,-1, 2,-1,3,4,5,-1,4,-1, 6,-1,4,-1,3,-1,2,3, 4,-1,-1,-1,2,-1,-1,-1];
+  var BASS=[130.81,98,110,87.31];
+  function audioInit(){
+    if(AC)return;
+    var C=window.AudioContext||window.webkitAudioContext;if(!C)return;
+    AC=new C();master=AC.createGain();master.gain.value=0;
+    var d=AC.createDelay(1);d.delayTime.value=.34;var fb=AC.createGain();fb.gain.value=.34;var wet=AC.createGain();wet.gain.value=.35;
+    master.connect(AC.destination);master.connect(d);d.connect(fb);fb.connect(d);d.connect(wet);wet.connect(AC.destination);
+  }
+  function tone(f,t,dur,type,vol){
+    var o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.value=f;
+    g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(vol,t+.012);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(g);g.connect(master);o.start(t);o.stop(t+dur+.05);
+  }
+  function tick(){
+    if(!AC)return;
+    while(mNext<AC.currentTime+.3){
+      var m=MEL[mStep%MEL.length];
+      if(m>=0){tone(SC[m],mNext,1.3,'triangle',.2);tone(SC[m]*2,mNext,.5,'sine',.05)}
+      if(mStep%8===0)tone(BASS[(mStep/8)%4],mNext,2.4,'sine',.2);
+      mNext+=60/84/2;mStep++;
+    }
+  }
+  function musicStart(){
+    try{
+      audioInit();if(!AC)return;AC.resume();
+      master.gain.cancelScheduledValues(AC.currentTime);master.gain.setTargetAtTime(.55,AC.currentTime,.4);
+      if(!mTimer){mNext=AC.currentTime+.1;mTimer=setInterval(tick,100)}
+    }catch(e){}
+  }
+  function musicStop(){
+    try{
+      if(master)master.gain.setTargetAtTime(0,AC.currentTime,.15);
+      if(mTimer){clearInterval(mTimer);mTimer=null}
+    }catch(e){}
+  }
+  function chime(){
+    if(!AC||!musicOn)return;
+    try{[0,2,4,5,7].forEach(function(n,i){tone(SC[n],AC.currentTime+i*.14,1.6,'triangle',.22)})}catch(e){}
+  }
+  function setMusicUI(){$('music').setAttribute('aria-pressed',String(musicOn));$('musicTxt').textContent=musicOn?'เพลง เปิด':'เพลง ปิด'}
+  $('music').onclick=function(){musicOn=!musicOn;setMusicUI();if(musicOn)musicStart();else musicStop()};
+  document.addEventListener('pointerdown',function(){if(musicOn&&!mTimer)musicStart()},{once:true});
+  setMusicUI();
+
   /* ---------- วาดหน้า ---------- */
   function dots(n,cls){var s='';for(var i=1;i<=5;i++)s+='<i class="'+(i<=n?cls:'')+'"></i>';return s}
+  function renderCats(){
+    $('cats').innerHTML=cats.map(function(c){return '<button class="chip" data-k="'+c.k+'" aria-pressed="'+(catSel===c.k)+'">'+c.t+'</button>'}).join('');
+  }
+  $('cats').addEventListener('click',function(e){var b=e.target.closest('button[data-k]');if(!b)return;catSel=b.dataset.k;renderCats();renderGrid()});
   function renderGrid(){
-    $('grid').innerHTML=items.map(function(it){
+    $('grid').innerHTML=items.filter(function(it){return catSel==='all'||it.cat===catSel}).map(function(it){
       var q=cart[it.id]||0;
       return '<article class="card'+(q?' has':'')+'"><div class="art">'+it.art+'</div>'+
         '<span class="tag">'+it.tag+'</span><h3>'+it.name+'</h3><p>'+it.desc+'</p>'+
@@ -279,14 +433,8 @@ footer{margin-top:26px;color:var(--muted);font-size:12.5px;text-align:center}
   function renderSlots(){
     $('slots').innerHTML=slots.map(function(s,i){return '<button class="chip" data-i="'+i+'" aria-pressed="'+(slot===i)+'">'+s+'</button>'}).join('');
   }
-  $('places').addEventListener('click',function(e){
-    var b=e.target.closest('button[data-id]');if(!b)return;
-    place=b.dataset.id;renderPlaces();updatePick();
-  });
-  $('slots').addEventListener('click',function(e){
-    var b=e.target.closest('button[data-i]');if(!b)return;
-    slot=+b.dataset.i;renderSlots();updatePick();
-  });
+  $('places').addEventListener('click',function(e){var b=e.target.closest('button[data-id]');if(!b)return;place=b.dataset.id;renderPlaces();updatePick()});
+  $('slots').addEventListener('click',function(e){var b=e.target.closest('button[data-i]');if(!b)return;slot=+b.dataset.i;renderSlots();updatePick()});
   function updatePick(){
     var p=places.filter(function(x){return x.id===place})[0];
     $('pickInfo').textContent=p?('รอบ '+slots[slot]):'ยังไม่ได้เลือกที่ลอย';
@@ -311,6 +459,83 @@ footer{margin-top:26px;color:var(--muted);font-size:12.5px;text-align:center}
     }
     finder(0,0);finder(N-7,0);finder(0,N-7);
   }
+
+  /* ---------- ฉากลอยกระทง ---------- */
+  var NS='http://www.w3.org/2000/svg';
+  function shoreFor(id){
+    var win='#ffd36b';
+    if(id==='temple')return '<path d="M0 200 Q50 178 110 200Z"/><path d="M250 200 V172 Q250 158 258 150 L262 118 L266 150 Q274 158 274 172 V200Z"/><path d="M282 200 V182 Q282 174 288 168 L291 150 L294 168 Q300 174 300 182 V200Z"/><path d="M230 200 Q250 186 330 200Z"/><path d="M330 200 Q360 176 400 190 V200Z"/><circle cx="262" cy="176" r="1.8" fill="'+win+'"/><circle cx="291" cy="186" r="1.5" fill="'+win+'"/>';
+    if(id==='bridge')return '<rect x="0" y="184" width="400" height="7"/><path d="M-10 200 Q40 168 90 200 M90 200 Q140 168 190 200 M190 200 Q240 168 290 200 M290 200 Q340 168 390 200" fill="none" stroke="#090d33" stroke-width="7"/><rect x="40" y="170" width="3" height="14"/><rect x="140" y="170" width="3" height="14"/><rect x="240" y="170" width="3" height="14"/><rect x="340" y="170" width="3" height="14"/><circle cx="41.5" cy="168" r="3" fill="'+win+'"/><circle cx="141.5" cy="168" r="3" fill="'+win+'"/><circle cx="241.5" cy="168" r="3" fill="'+win+'"/><circle cx="341.5" cy="168" r="3" fill="'+win+'"/>';
+    if(id==='canal'||id==='duck-canal'){
+      function house(x,w){return '<path d="M'+x+' 176 L'+(x+w/2)+' 158 L'+(x+w)+' 176Z"/><rect x="'+(x+4)+'" y="176" width="'+(w-8)+'" height="16"/><rect x="'+(x+8)+'" y="192" width="3" height="10"/><rect x="'+(x+w-11)+'" y="192" width="3" height="10"/><rect x="'+(x+w/2-4)+'" y="180" width="8" height="8" fill="'+win+'"/>'}
+      return house(30,52)+house(110,44)+house(300,56)+'<path d="M0 200 Q60 190 130 200 Q250 188 400 200V200Z"/>'+(id==='duck-canal'?'<path d="M200 168 L210 156 L220 168 L230 156 L240 168" fill="none" stroke="#FF8FB8" stroke-width="2"/>':'');
+    }
+    return '<path d="M0 200 Q50 186 100 200 Q160 188 220 200 Q300 184 400 200Z"/><path d="M20 200 V176 M28 200 V170 M36 200 V178 M360 200 V174 M368 200 V168" stroke="#090d33" stroke-width="2.4" stroke-linecap="round"/>';
+  }
+  function buildScene(order){
+    var i,k;
+    scene=order;released=false;
+    timers.forEach(clearTimeout);timers=[];
+    /* stars */
+    var st='';for(i=0;i<46;i++){var sx=(i*89)%400,sy=(i*53)%150,sr=.6+((i*7)%10)/10;st+='<circle class="star" cx="'+sx+'" cy="'+sy+'" r="'+sr.toFixed(1)+'" style="animation-delay:'+((i%7)*.45).toFixed(2)+'s"/>';}
+    $('stars').innerHTML=st;
+    /* moon */
+    var r=order.place.id==='moon-lake'?40:27;
+    $('moonG').innerHTML='<circle cx="300" cy="72" r="'+(r*3)+'" fill="url(#mg)"/><circle cx="300" cy="72" r="'+r+'" fill="#FFE9A8"/><circle cx="'+(300-r*.3)+'" cy="'+(72+r*.2)+'" r="'+(r*.16)+'" fill="#E9C46A" opacity=".5"/><circle cx="'+(300+r*.28)+'" cy="'+(72-r*.3)+'" r="'+(r*.1)+'" fill="#E9C46A" opacity=".5"/>';
+    $('shore').innerHTML=shoreFor(order.place.id);
+    /* reflection */
+    var rf='',ws=[46,38,30,22,14];for(i=0;i<5;i++){rf+='<line class="shim" x1="'+(300-ws[i]/2)+'" x2="'+(300+ws[i]/2)+'" y1="'+(214+i*13)+'" y2="'+(214+i*13)+'" stroke-opacity="'+(.55-i*.08).toFixed(2)+'" style="animation-delay:'+(i*.4)+'s"/>';}
+    $('refl').innerHTML=rf;
+    $('water-extra').innerHTML=order.place.id==='lotus-pond'?'<ellipse cx="70" cy="240" rx="22" ry="5" fill="#1d6b5a" opacity=".85"/><circle cx="74" cy="237" r="3" fill="#FF8FB8"/><ellipse cx="330" cy="262" rx="26" ry="6" fill="#1d6b5a" opacity=".85"/><circle cx="326" cy="258" r="3.4" fill="#FF8FB8"/><ellipse cx="190" cy="226" rx="16" ry="4" fill="#1d6b5a" opacity=".8"/>':'';
+    /* krathong */
+    var units=[];items.forEach(function(it){for(var q=0;q<(order.cart[it.id]||0);q++)units.push(it)});
+    units=units.slice(0,12);
+    var rows=Math.ceil(units.length/4),html='',idx=0;
+    scene.units=units;
+    for(var rr=0;rr<rows;rr++){
+      var inRow=Math.min(4,units.length-rr*4);
+      for(k=0;k<inRow;k++){
+        var x=(k+.5)/inRow*100,y=86-rr*9,s=.86-rr*.11;
+        html+='<div class="kt" data-i="'+idx+'" style="left:'+x.toFixed(1)+'%;top:'+y+'%;--s:'+s.toFixed(2)+';--d:'+((idx%5)*.37).toFixed(2)+'s;z-index:'+Math.round(y)+'"><div class="in"><i class="rip"></i><i class="glow"></i>'+units[idx].art+'</div></div>';
+        idx++;
+      }
+    }
+    $('kts').innerHTML=html;
+    $('sayTop').className='say top';$('sayTop').textContent='กระทงของคุณรอที่ท่าน้ำ พร้อมแล้วก็ปล่อยได้เลย';
+    $('sayWish').className='say wish';$('sayWish').textContent='';
+    $('cta').className='cta';$('release').disabled=false;
+    $('ticket').hidden=true;
+  }
+  function release(){
+    if(released||!scene)return;released=true;
+    $('release').disabled=true;$('cta').className='cta hide';
+    $('sayTop').textContent='ลอยไปแล้ว ขอให้ทุกอย่างลอยไปด้วยกัน';
+    chime();
+    var kts=$('kts').children;
+    for(var i=0;i<kts.length;i++){
+      (function(el,i){
+        var ex=10+((i*37)%80),ey=44+((i*23)%20),es=.26+((i*13)%10)/55;
+        el.style.setProperty('--t',(8.5+(i%3)*1.2)+'s');el.style.setProperty('--dl',(i*.45)+'s');
+        el.style.zIndex=Math.round(ey);
+        el.style.left=ex+'%';el.style.top=ey+'%';el.style.setProperty('--s',es.toFixed(2));
+      })(kts[i],i);
+    }
+    var w=scene.wish||'ขอให้สุขใจ ลอยทุกข์ไปไกลๆ';
+    timers.push(setTimeout(function(){$('sayWish').textContent='“ '+w+' ”';$('sayWish').className='say wish show'},1800));
+    timers.push(setTimeout(function(){$('sayTop').className='say top hide'},4500));
+    timers.push(setTimeout(showTicket,reduced?600:6500));
+  }
+  function showTicket(){
+    var o=scene;
+    $('code').textContent=o.code;
+    var rows=[['จุดลอย',o.place.name],['รอบ',slots[o.slot]],['กระทง',o.list.map(function(it){return it.name+' × '+o.cart[it.id]}).join(', ')],['ยอดชำระ',baht(o.total)]];
+    if(o.wish)rows.push(['คำอธิษฐาน',o.wish]);
+    $('detail').innerHTML=rows.map(function(r){return '<dt>'+r[0]+'</dt><dd></dd>'}).join('');
+    var dds=$('detail').querySelectorAll('dd');rows.forEach(function(r,i){dds[i].textContent=r[1]});
+    $('ticket').hidden=false;
+    try{$('ticket').scrollIntoView({behavior:reduced?'auto':'smooth',block:'nearest'})}catch(e){}
+  }
+  $('release').onclick=release;
 
   /* ---------- ไปมาระหว่างขั้น ---------- */
   function go(n){
@@ -343,19 +568,13 @@ footer{margin-top:26px;color:var(--muted);font-size:12.5px;text-align:center}
     var code='KT-'+Math.random().toString(36).slice(2,6).toUpperCase()+'-'+String(Math.floor(Math.random()*900)+100);
     var wish=$('wish').value.trim();
     var list=items.filter(function(it){return cart[it.id]});
-    var first=list[0];
-    $('pond').innerHTML='<div class="boat">'+first.art+'</div><svg viewBox="0 0 600 30" preserveAspectRatio="none" style="display:block;width:100%;height:26px" aria-hidden="true"><path d="M-20 14 Q 25 0 70 14 T 160 14 T 250 14 T 340 14 T 430 14 T 520 14 T 610 14 V30 H-20Z" fill="var(--teal)" opacity=".55"/></svg>';
-    $('code').textContent=code;
-    var rows=[['จุดลอย',p.name],['รอบ',slots[slot]],['กระทง',list.map(function(it){return it.name+' × '+cart[it.id]}).join(', ')],['ยอดชำระ',baht(s.t)]];
-    if(wish)rows.push(['คำอธิษฐาน',wish]);
-    $('detail').innerHTML=rows.map(function(r){return '<dt>'+r[0]+'</dt><dd></dd>'}).join('');
-    var dds=$('detail').querySelectorAll('dd');rows.forEach(function(r,i){dds[i].textContent=r[1]});
+    var order={code:code,place:p,slot:slot,wish:wish,total:s.t,list:list,cart:JSON.parse(JSON.stringify(cart))};
     sendOrder({code:code,place:p.name,slot:slots[slot],wish:wish,total:s.t,
       items:list.map(function(it){return it.name+' x'+cart[it.id]}).join(', ')});
-    go(3);
+    go(3);buildScene(order);
   };
-  $('again').onclick=function(){cart={};place=null;slot=0;$('wish').value='';renderGrid();updateBar();go(0)};
+  $('again').onclick=function(){cart={};place=null;slot=0;catSel='all';$('wish').value='';renderCats();renderGrid();updateBar();go(0)};
 
-  renderGrid();updateBar();go(0);
+  renderCats();renderGrid();updateBar();go(0);
 })();
 </script>
